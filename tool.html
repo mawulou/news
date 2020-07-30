@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>深圳2020积分计算器</title>
+</head>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<body>
+<div id="app">
+    所属区：
+    <input type="radio" name="district" value="0" checked>南山
+    <input type="radio" name="district" value="1">宝安
+
+    <div v-if="active==0">
+        学位申请人（特指申请入学的适龄儿童、小学毕业生及申请转学插班的学生，下同）及其父母（特指学位申请人的父亲、母亲或其法定监护人，下同）户籍、居住证对应分值 <br>
+        <el-tabs v-model="city">
+            <el-tab-pane label="深户" name="shenhu">
+                <el-radio class="my-radio"   v-model="huji" label="A"/>深户南山区户主是父母——30分 <br>
+                <el-radio class="my-radio"  v-model="huji" label="B"/>深户南山区户主非父母——26分 <br>
+                <el-radio class="my-radio"  v-model="huji" label="C"/>深户其他区——20分 <br>
+
+            </el-tab-pane>
+            <el-tab-pane label="非深户" name="feishenhu">
+                <el-radio class="my-radio" v-model="huji" label="D"/>学生非深户，父母一方是深户，另一方持有有效居住证（含父母均为深户）——20分 <br>
+                <el-radio class="my-radio" v-model="huji" label="E"/>学生非深户，父母为非深户但均持有有效居住证——18分 <br>
+                <el-radio class="my-radio" v-model="huji" label="F"/>学生非深户，父母一方为深户或持有有效居住证，另一方为非深户且未持有有效居住证——0分 <br>
+                <el-radio class="my-radio" v-model="huji" label="G"/>学生非深户，父母属于享受相关政策优惠人员——20分 <br>
+            </el-tab-pane>
+        </el-tabs>
+
+
+
+        <el-tabs value="first"  >
+            <el-tab-pane label="学区内购房" name="first">
+                <div style="width: 100%">
+                    <el-radio class="my-radio"    v-model="fangchang" label="A"/>A:学区内购住宅性质房产满3年以上且持有产权占比51％（含）以上——40分 <br>
+
+                    <el-radio class="my-radio"    v-model="fangchang" label="B"/>B:学区内购住宅性质房产3年以下满2年以上且持有产权占比51％（含）以上——38分 <br>
+
+                    <el-radio class="my-radio"   v-model="fangchang" label="C"/>C:学区内购住宅性质房产2年以下满1年以上且持有产权占比51％（含）以上 ——36分 <br>
+
+                    <el-radio class="my-radio"   v-model="fangchang" label="D"/>D:学区内购住宅性质房产1年以下且持有产权占比51％（含）以上 ——34分 <br>
+
+                    <el-radio  class="my-radio"    v-model="fangchang" label="E"/>E:学区内购住宅性质房产，持有产权占比低于51%（不含）高于30%（含） ——30分 <br>
+
+                    <el-radio  class="my-radio"  v-model="fangchang" label="F"/>F:学区内购住宅性质房产，持有产权占比低于30%（不含） ——20分 <br>
+
+                    <el-radio  class="my-radio"  v-model="fangchang" label="G"/>G:学区内购合法集资房或者合法自建房（需提供街道办证明） ——20分 <br>
+
+                    <el-radio  class="my-radio"  v-model="fangchang" label="H"/>H:学区内购单位自建房（需提供单位内部买卖合同）——15分 <br>
+
+                </div>
+                <el-alert
+                        title=" 购买安居型商品房的，请对照选项A、B、C、D、E，选择对应的一项。
+
+                    用于申请学位的房产持有人必须为学位申请人父母。使用上述A、B、C、D类房产申请学位时，如果学位申请人使用的是其祖父母、外祖父母购买的房产，则该房产的购买人与学位申请人及其父母的户口登记信息必须在同一户口上。
+
+                    购房时长为房产证或购房合同登记日期到入学当年8月31日之间的时长。在报名工作开始前未取得入学当年8月31日之前正式入伙通知书的房产不能用于申请学位。<br><br>
+             "
+                        type="warning"
+                        :closable="false"/>
+
+
+
+
+
+
+
+            </el-tab-pane>
+            <el-tab-pane label="学区内租房" name="second">
+                <el-radio class="my-radio"  v-model="fangchang"  label="I"/>I:租住政府廉租房、公租房、周转房——20分
+
+                注：（1）可以用于申请学位的政府廉租房、公租房、周转房专指住宅性质房产，其合法承租人将此类房屋转租他人属于违法行为，其他人员租赁此类房产不具备合法学位申请资格；（2）用于申请学位的房产为通过定向配租方式取得的公租房，按租住单位宿舍类房产积分。<br>
+
+                <el-radio  class="my-radio" v-model="fangchang"  label="J"/> J:使用祖父母、外祖父母房产申请学位，但申请人的户口与其祖父母、外祖父母户口登记信息不在一起——20分<br>
+
+                <el-radio  class="my-radio" v-model="fangchang"  label="K"/> K:租住住宅性质房产满5年以上——15分<br>
+
+                <el-radio  class="my-radio" v-model="fangchang"  label="L"/>L:租住住宅性质房产5年以下满3年以上——12分<br>
+
+                <el-radio class="my-radio" v-model="fangchang"  label="M"/>M:租住住宅性质房产3年以下满2年以上——9分<br>
+
+                <el-radio  class="my-radio"v-model="fangchang"  label="N"/> N:租住住宅性质房产2年以下满1年以上——7分<br>
+
+                <el-radio  class="my-radio"v-model="fangchang"  label="O"/>O:租住单位宿舍满2年以上——9分<br>
+
+                <el-radio class="my-radio" v-model="fangchang"  label="P"/>P:租住单位宿舍不满2年——7分<br>
+
+                <br>
+                <span style="color: #81ca69">申请人全家成员在深圳市域内没有房产</span>
+                <el-radio  class="my-radio" v-model="fangchangjiafen"  label="α"/>α、学位申请人户籍属于其申请学校学区范围内且户主是其父母——12分；<br>
+                <el-radio  class="my-radio" v-model="fangchangjiafen"  label="β"/>β、不满足“α”中所述条件的其他深圳市户籍学位申请人——7分<br>
+
+            </el-tab-pane>
+
+        </el-tabs>
+
+
+        <div>
+
+            <el-divider content-position="left">父母在深圳缴纳社会保险情况对应分值</el-divider>
+                <el-radio  class="my-radio"    v-model="baoxian"  label="A"/>学位申请人为深圳户籍——10分<br>
+                <el-radio  class="my-radio"  v-model="baoxian"  label="B"/>非深圳户籍学位申请人，A:截至入学当年4月30日学位申请人父母均连续缴纳社保满1年以上，且申请入学时其社保卡具备有效使用功能（单亲家庭按双社保计分，但需查验相关法定证件或文书）——10分<br>
+                <el-radio  class="my-radio"  v-model="baoxian"  label="C"/>非深圳户籍学位申请人，B:截至入学当年4月30日学位申请人父母其中一方连续缴纳社保满1年以上，且申请入学时其社保卡具备有效使用功能——5分<br>
+        </div>
+        <el-divider content-position="left">加分项</el-divider>
+
+            <el-radio  v-model="dusheng" label="A"/>独生子女加1分
+            <el-radio  class="my-radio"  v-model="dusheng" label="B"/>非独生子女<br>
+
+
+        <el-tag>户籍时长加分项</el-tag>
+           <div>户籍时长<el-input-number size="mini" v-model="hujishichang"></el-input-number>年</div>
+
+        <div>
+            <el-alert
+                    title="截至入学当年4月30日，南山区户籍时长每满1年加1.5分，最高加分不超过7.5分，不满1年不加分；
+                          截至入学当年4月30日，南山区以外深圳市其他区户籍时长每满1年加1分，最高加分不超过5分，不满1年不加分。 "
+                    type="warning"
+                    :closable="false"/>
+
+        </div>
+
+
+
+
+
+
+        <el-tag>社保加分项</el-tag>
+             <div>连续缴纳社保<el-input-number size="mini" v-model="shebaoyueshu"></el-input-number>月</div>
+            <br>
+            <div>
+                <el-alert
+                        title="从社保连续缴纳的第13个月开始计分，截至入学当年4月30日，每缴纳1个月加0.1分，累计计算，最高不超过10分。连续缴纳不满1年的，不具备学位申请资格（该加分项以父母缴纳社保时间长的一方计）。
+                      "
+                        type="warning"
+                        :closable="false"/>
+
+            </div>
+
+
+        <el-checkbox v-model="shebaoman72"></el-checkbox>
+       初一学位申请人父母双方缴纳社保（不包含补缴）时长均超过72个月，且该申请人具有深圳市小学6年完整学籍，可再加1.5分。小一学位申请人父母只须双方缴纳社保（不包含补缴）时长均超过72个月，即可再加1.5分。
+
+
+        </div>
+
+    <div style="padding-left: 40%;margin-top: 10px;margin-bottom: 10px">
+        <el-tag type="success" effect="dark" size="big">{{total}}分</el-tag>
+    </div>
+
+
+</div>
+
+
+
+</body>
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            city:'shenhu',
+            active: 0,
+            huji: null,
+            fangchang:null,
+            fangchangjiafen:null,
+            baoxian:null,
+            dusheng:null,
+            hujishichang:0,
+            shebaoyueshu:0,
+            shebaoman72:false,
+            total:0
+        },
+        watch:{
+            huji:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            fangchang:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            fangchangjiafen:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            baoxian:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            dusheng:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            hujishichang:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            shebaoyueshu:function(newVal,oldVal){
+                this.computeTotal()
+            },
+            shebaoman72:function(newVal,oldVal){
+                this.computeTotal()
+            }
+        },
+        methods:{
+            computeTotal(){
+               var total=0;
+               if(this.huji){
+                   if(this.huji==='A'){
+                       total+=30
+                   }else if(this.huji==='B'){
+                       total+=26
+                   }else if(this.huji==='C'){
+                       total+=20
+                   }else if(this.huji==='D'){
+                       total+=20
+                   }else if(this.huji==='E'){
+                       total+=18
+                   }else if(this.huji==='F'){
+                       total+=0
+                   }else if(this.huji==='G'){
+                       total+=20
+                   }
+               }
+                if(this.fangchang){
+                   if(this.fangchang==='A'){
+                       total+=40
+                   }else if(this.fangchang==='B'){
+                       total+=38
+                   }else if(this.fangchang==='C'){
+                       total+=36
+                   }else if(this.fangchang==='D'){
+                       total+=34
+                   }else if(this.fangchang==='E'){
+                       total+=30
+                   }else if(this.fangchang==='F'){
+                       total+=20
+                   }else if(this.fangchang==='G'){
+                       total+=20
+                   }else if(this.fangchang==='H'){
+                       total+=15
+                   }else if(this.fangchang==='I'){
+                       total+=20
+                   }else if(this.fangchang==='J'){
+                       total+=20
+                   }else if(this.fangchang==='K'){
+                       total+=15
+                   }else if(this.fangchang==='L'){
+                       total+=12
+                   }else if(this.fangchang==='M'){
+                       total+=9
+                   }else if(this.fangchang==='N'){
+                       total+=7
+                   }else if(this.fangchang==='O'){
+                       total+=9
+                   }else if(this.fangchang==='P'){
+                       total+=7
+                   }
+               }
+
+                if(this.fangchangjiafen){
+                   if(this.fangchangjiafen==='α'){
+                       total+=12
+                   } else if(this.fangchangjiafen==='β'){
+                       total+=7
+                   }
+                }
+
+                if(this.dusheng){
+                   if(this.dusheng==='A'){
+                       total+=1
+                   }
+                }
+
+                if(this.baoxian){
+                   if(this.baoxian==='A'){
+                       total+=10
+                   }
+                   if(this.baoxian==='B'){
+                       total+=10
+                   }
+                   if(this.baoxian==='C'){
+                       total+=10
+                   }
+                }
+
+                if(this.hujishichang){
+                   var hujishichang=this.hujishichang*1.5
+                   if(this.city==='shenhu'&&hujishichang>7.5){
+                       hujishichang = 7.5
+                   }
+                    if(this.city==='feishenhu'&&hujishichang>5){
+                       hujishichang = 5
+                   }
+                    total+=hujishichang
+
+                }
+
+                if(this.shebaoyueshu){
+                   var shebaoyueshu = this.shebaoyueshu*0.1
+                    if(shebaoyueshu>10){
+                        shebaoyueshu = 10
+                    }
+                    total+=shebaoyueshu
+                }
+                if(this.shebaoman72){
+                    total+=1.5
+                }
+
+
+               this.total = total
+            }
+        }
+    })
+
+
+</script>
+<style>
+    .my-radio{
+        margin-top: 10px;
+    }
+    .el-radio, .el-radio__input {
+        line-height: 1;
+        outline: 0;
+        white-space:normal !important;
+    }
+    .title1{
+        background-color: #81ca69;
+    }
+    .title2{
+        background-color: #61b8ff;
+    }
+</style>
+</html>
